@@ -1,0 +1,16 @@
+{
+  "name": "play",
+  "version": "1.0.0",
+  "description": "it is my first larger scale backend project with the help of the Chai aur Code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "express",
+    "mongoose"
+  ],
+  "author": "Sourav Chhimpa",
+  "license": "ISC"
+}
