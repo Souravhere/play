@@ -1,7 +1,12 @@
 import mongoose from "mongoose"
 import { DB_NAME } from "./constants"
-import express from 'express'
 
+
+
+
+// simple appoch not much used in the production
+/*
+import express from 'express'
 const app = express()
 
 ( async()=>{
@@ -20,3 +25,4 @@ const app = express()
         throw error;
     }
 })()
+*/
