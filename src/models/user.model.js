@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 
 const userSchema = new Schema(
     {
-        username:{
+        userName:{
             type: String,
             required:true,
             unique: true,
@@ -19,7 +19,7 @@ const userSchema = new Schema(
             lowercase:true,
             trim:true
         },
-        fullname:{
+        fullName:{
             type: String,
             required:true,
             trim:true,
@@ -48,6 +48,7 @@ const userSchema = new Schema(
     },
     {timestamps:ture});
 
+// this function for convert the pass in the hash form
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next(); //this is a condition if pass is not update that it will be not run this function 
 
@@ -58,6 +59,15 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password);
     //this will be return true | false only
+}
+
+userSchema.methods.generateAccessToken = function() {
+    jwt.sign({
+        _id: this._id,
+        email: this.email,
+        userName: this.userName,
+        fullName: this.fullName
+    })
 }
 
 export const User = mongoose.model("User", userSchema);
