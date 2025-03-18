@@ -1,4 +1,6 @@
 import mongoose, {Schema} from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt'
 
 const userSchema = new Schema(
     {
@@ -45,5 +47,12 @@ const userSchema = new Schema(
         }
     },
     {timestamps:ture});
+
+userSchema.pre("save", async function (next) {
+    if(!this.isModified("password")) return next(); //this is a condition if pass is not update that it will be not run this function 
+
+    this.password = bcrypt.hash(this.password, 10) //encrypt this password 
+    next() //flag to make the pocess next step
+})
 
 export const User = mongoose.model("User", userSchema);
