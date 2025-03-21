@@ -52,7 +52,7 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next(); //this is a condition if pass is not update that it will be not run this function 
 
-    this.password = bcrypt.hash(this.password, 10) //encrypt this password 
+    this.password = await bcrypt.hash(this.password, 10) //encrypt this password 
     next() //flag to make the pocess next step
 })
 
