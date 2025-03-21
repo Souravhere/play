@@ -46,7 +46,7 @@ const userSchema = new Schema(
             type: String
         }
     },
-    {timestamps:ture});
+    {timestamps:true});
 
 // this function for convert the pass in the hash form
 userSchema.pre("save", async function (next) {
