@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { application } from "express";
 
 const registerUser = asyncHandler( async (req, res) =>{
     // res.status(200).json({
@@ -40,6 +41,24 @@ const registerUser = asyncHandler( async (req, res) =>{
     
     if (!avatar) {
         throw new ApiError(400,"Avatar is required!");
+    }
+
+    // where we will added the data to the DB
+    const user = await User.create({
+        fullName,
+        email,
+        password,
+        userName: userName.toLowerCase(),
+        avatar: avatar.url,
+        coverImage: coverImage?.url || ""
+    })
+
+    // here we check the user will be created 
+    const createdUser = await User.findById(user._id).select("-password -refreshToken") //with select we will added that we don't want in the response
+
+    // here we check if user not found 
+    if (!createdUser) {
+        throw new ApiError(500, "Somthing went worng when registering user!")
     }
 });
 
