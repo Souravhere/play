@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { application } from "express";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req, res) =>{
     // res.status(200).json({
@@ -60,6 +60,11 @@ const registerUser = asyncHandler( async (req, res) =>{
     if (!createdUser) {
         throw new ApiError(500, "Somthing went worng when registering user!")
     }
+
+    // here we return the response from the db
+    return res.status(201).json(
+        new ApiResponse(201, createdUser, "User registered Successfully")
+    )
 });
 
 export {registerUser}
