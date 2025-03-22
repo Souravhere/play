@@ -12,11 +12,11 @@ const registerUser = asyncHandler( async (req, res) =>{
     const {fullName, email, userName, password} = req.body;
     console.log("email :", email);
     // here we will check that all fields have data they not empty
-    if (
-        [fullName, email, userName, password].some((field) => field?.trim() === "")
-    ) { 
-        throw new ApiError(400, "All fields are required!")
-    }
+    // if (
+    //     [fullName, email, userName, password].some((field) => field?.trim() === "")
+    // ) { 
+    //     throw new ApiError(400, "All fields are required!")
+    // }
 
     // here we check the user will not exist first time 
     const existedUser = await User.findOne({
