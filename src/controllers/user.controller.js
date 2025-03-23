@@ -89,7 +89,6 @@ const registerUser = asyncHandler( async (req, res) =>{
 });
 
 // here we will added the login 
-
 const loginUser =  asyncHandler( async(req, res) => {
     // get data from the frontend 
     const {email, userName, password} = req.body;
@@ -141,4 +140,13 @@ const loginUser =  asyncHandler( async(req, res) => {
         )
     )
 })
-export {registerUser}
+
+// here user will be logout
+const logoutUser = asyncHandler( async(req,res) =>{
+
+})
+export {
+    registerUser,
+    loginUser,
+    logoutUser
+}
