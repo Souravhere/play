@@ -4,6 +4,23 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
+// here a function to handled the referesh and access tokens
+const generateAccessAndRefereshTokens = async (userId) => {
+    try {
+        const user = await User.findById(userId)
+        // these functions are called from the user model
+        const accessToken = user.generateAccessToken()
+        const refereshToken = user.generateRefreshToken()
+        // save the referesh token in the db
+        user.refereshToken = refereshToken
+        await user.save({validateBeforeSave: false})
+        //export the tokens for the cookies 
+        return {accessToken, refereshToken}
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong to Generate Access and Referesh token!")
+    }
+}
+
 const registerUser = asyncHandler( async (req, res) =>{
     // res.status(200).json({
     //     message: "ok"
