@@ -121,5 +121,11 @@ const loginUser =  asyncHandler( async(req, res) => {
 
     // here we designe a cookie 
 
+    // helped prevent cookies edit in the frontend 
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    
 })
 export {registerUser}
