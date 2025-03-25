@@ -218,6 +218,27 @@ const refreshAccessToken = asyncHandler( async(req, res) =>{
         throw new ApiError(401,error?.message || "invalid refresh token!")
     }
 })
+
+// here we add func to change the password
+const changeCurrentPassword = asyncHandler( async(req, res) =>{
+    // here we get the both pass from the frontend
+    const { oldPassword, newPassword} = req.body;
+    // here we find the user 
+    const user = await User.findById(req.user?.id);
+    // compaire the old password
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
+    if (!isPasswordCorrect) {
+        throw new ApiError(400, "Invalid Old Password!")
+    }
+    // replace the old pass with new 
+    user.password = newPassword
+    await user.save({validateBeforeSave: false})
+
+    return
+    .status(200)
+    .json(new ApiResponse(200, {},"Password changed successfully"))
+})
+
 export {
     registerUser,
     loginUser,
