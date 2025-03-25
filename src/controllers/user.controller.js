@@ -224,7 +224,7 @@ const changeCurrentPassword = asyncHandler( async(req, res) =>{
     // here we get the both pass from the frontend
     const { oldPassword, newPassword} = req.body;
     // here we find the user 
-    const user = await User.findById(req.user?.id);
+    const user = await User.findById(req.user?._id);
     // compaire the old password
     const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
     if (!isPasswordCorrect) {
@@ -245,11 +245,36 @@ const getCurrentUser = asyncHandler( async(req, res) =>{
     .status(200)
     .json(200,req.user,"current user fetched successfully")
 })
+
+// here we added logic to update user info 
+const updateAccountDetails = asyncHandler( async(req, res) => {
+    const {fullName, email} = req.body;
+
+    if(!fullName || !email){
+        throw new ApiError(400, "all field are required!")
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName,
+                email
+            }
+        },
+        {new: true}
+    ).select("-password")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Account details updated sucessfully!"))
+})
 export {
     registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentUser
+    getCurrentUser,
+    updateAccountDetails
 }
