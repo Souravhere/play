@@ -294,6 +294,31 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Avatar will be update"))
 })
+
+// here will add the function to update the cover image
+const coverImageUpdate = asyncHandler(async(req, res) => {
+    const coverImageLocalPath = req.file?.path
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover Image is missing!")
+    }
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    if (!coverImage.url) {
+        throw new ApiError(400,"Error file while CoverImage Uploading!")
+    }
+    // new we update the url in the db
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                coverImage: coverImage.url
+            }
+        },
+        {new: true}
+    )
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user,"Cover Image will be update"))
+})
 export {
     registerUser,
     loginUser,
