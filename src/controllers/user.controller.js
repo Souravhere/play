@@ -269,6 +269,15 @@ const updateAccountDetails = asyncHandler( async(req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated sucessfully!"))
 })
+
+// here we added the logic to update the user media
+const updateUserAvatar = asyncHandler(async(req, res) => {
+    const avatarLocalPath = req.file?.path
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar file is missing!")
+    }
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+})
 export {
     registerUser,
     loginUser,
