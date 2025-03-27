@@ -290,6 +290,9 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
         },
         {new:true}
     )
+
+    // here added the logic to delete the old image
+
     return res
     .status(200)
     .json(new ApiResponse(200, user, "Avatar will be update"))
@@ -315,6 +318,9 @@ const coverImageUpdate = asyncHandler(async(req, res) => {
         },
         {new: true}
     )
+    
+    // here added the logic to delete the old image
+
     return res
     .status(200)
     .json(new ApiResponse(200, user,"Cover Image will be update"))
