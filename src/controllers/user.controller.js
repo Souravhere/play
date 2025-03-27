@@ -325,6 +325,33 @@ const coverImageUpdate = asyncHandler(async(req, res) => {
     .status(200)
     .json(new ApiResponse(200, user,"Cover Image will be update"))
 })
+
+// get user channel profile 
+const getUserChannelProfile = asyncHandler(async(req,res) => {
+    const {userName} = req.params // to get the username form the the url
+    if (!userName?.trim()) {
+        throw new ApiError(400,"userName is missing!")
+    }
+
+    // here we will used the aggregate pipline to merge the modles in the db and get the combined data 
+    User.aggregate([
+        {
+            // find the username in the db
+            $match:{
+                userName: userName.toLowerCase()
+            }
+        },
+        {
+            $lookup:{
+                from:"subscriptios", // it will be changed to Subscription => subscriptions auto by db
+                localField: "_id",
+                foreignField:"channel",
+                as:"subscribers"
+            }
+        }
+    ])
+
+})
 export {
     registerUser,
     loginUser,
