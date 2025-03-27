@@ -356,9 +356,28 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
                 from:"subscriptios",
                 localField:"_id",
                 foreignField:"subscriber",
-                as: "subscriberedTo"
+                as: "subscribedTo"
             }
         },
+        // here we created new field to calculate the all subscribers and subscriberedTo and added in new field
+        {
+            $addFields:{
+                subscriberCount:{
+                    $size: "$subscribers" // use the as from the lookup
+                },
+                channelSubscribedToCount:{
+                    $size: "$subscribedTo"
+                },
+                // here we check the user will be subscribed the current channel
+                isSubscribed: {
+                    $cond:{
+                        if:{$in: [req.user?._id, "$subscribers.subscriber"]},
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        }
     ])
 
 })
