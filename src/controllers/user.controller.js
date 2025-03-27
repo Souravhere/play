@@ -335,6 +335,7 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
 
     // here we will used the aggregate pipline to merge the modles in the db and get the combined data 
     User.aggregate([
+        // this pipline is added to count the total subs
         {
             // find the username in the db
             $match:{
@@ -348,7 +349,16 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
                 foreignField:"channel",
                 as:"subscribers"
             }
-        }
+        },
+        // this pipline is counts we follows to other channels
+        {
+            $lookup:{
+                from:"subscriptios",
+                localField:"_id",
+                foreignField:"subscriber",
+                as: "subscriberedTo"
+            }
+        },
     ])
 
 })
