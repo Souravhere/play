@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // here a function to handled the referesh and access tokens
 const generateAccessAndRefereshTokens = async (userId) => {
@@ -403,7 +404,22 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
 
 // get user watch history
 const getWatchHistory = asyncHandler(async(req, res) => {
-    
+    const user = User.aggregate([
+        {
+            // here we match the _id "not the mongoose id this id is from the DB atles"
+            $match: {
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup:{
+                from:"videos",
+                localField:"watchHistory",
+                foreignField:"_id",
+                as:"watchHistory"
+            }
+        }
+    ])
 })
 export {
     registerUser,
