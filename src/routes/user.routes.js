@@ -27,7 +27,7 @@ router.route("/logout").post(verifyJWT, logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT,changeCurrentPassword)
 router.route("/current-user").get(verifyJWT, getCurrentUser)
-router.route("/update-account").patch(verifyJWT,updateAccountDetails) // patch will be used when we don't update the complete data just update few fiels
+router.route("/update-account").patch(verifyJWT, updateAccountDetails) // patch will be used when we don't update the complete data just update few fiels
 
 // handled the file 
 router.route("/change-avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
