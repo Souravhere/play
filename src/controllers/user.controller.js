@@ -416,7 +416,36 @@ const getWatchHistory = asyncHandler(async(req, res) => {
                 from:"videos",
                 localField:"watchHistory",
                 foreignField:"_id",
-                as:"watchHistory"
+                as:"watchHistory",
+                // here we used pipline function to get owner
+                pipeline:[
+                    {
+                        $lookup:{
+                            from: "users",
+                            localField:"owner",
+                            foreignField:"_id",
+                            as: "owner",
+                            // this pipline to give limited output data 
+                            pipeline:[
+                                {
+                                    $project:{
+                                        fullName:1,
+                                        userName:1,
+                                        avatar:1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    //this pipline will be improved the structrue of the output
+                    {
+                        $addFields:{
+                            owner:{
+                                $first: "owner"
+                            }
+                        }
+                    }
+                ]
             }
         }
     ])
